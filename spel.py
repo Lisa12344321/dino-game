@@ -1,5 +1,8 @@
 import tkinter as tk
 
+def dino_move():
+    pass
+
 def jump(event):
     global is_jumping
     if not is_jumping: #om man inte hoppar
@@ -74,11 +77,12 @@ dino_dead_img = tk.PhotoImage(file="images/dead.png")
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
 player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, fill="blue") #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet
-dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) #är 10px åt vänster om hitboxen
-
+#dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) #är 10px åt vänster om hitboxen
+dino_idle_jump = tk.Label(canvas, image=dino_idle_jump_img, anchor="nw")
+dino_idle_jump.place(x=player_x_pos-10, y=player_y_pos)
 
 #bind
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
 
-
+dino_move()
 root.mainloop()
