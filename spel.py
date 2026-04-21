@@ -1,5 +1,40 @@
 import tkinter as tk
 
+def create_enemy_1():
+    global cactus_1
+
+    cactus_1 = canvas.create_image(800, player_y_pos, anchor="nw", image=cactus_img)
+    move_enemy_1()
+
+def create_enemy_2():
+    global cactus_2
+
+    cactus_2 = canvas.create_image(1100, player_y_pos, anchor="nw", image=cactus_img)
+    move_enemy_2()
+
+def move_enemy_1():
+    global cactus_1
+    canvas.move(cactus_1, -5, 0)
+    if canvas.coords(cactus_1)[0] < -50:
+        canvas.delete(cactus_1)
+        create_enemy_1()
+        return
+
+    root.after(10, move_enemy_1)
+
+def move_enemy_2():
+    global cactus_2
+    canvas.move(cactus_2, -5, 0)
+    if canvas.coords(cactus_2)[0] < -50:
+        canvas.delete(cactus_2)
+        create_enemy_2()
+        return
+
+    root.after(10, move_enemy_2)
+
+
+
+
 def dino_move():
     global dino_idle_jump
 
@@ -77,6 +112,7 @@ dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
 dino_dead_img = tk.PhotoImage(file="images/dead.png")
+cactus_img = tk.PhotoImage(file="images/kaktus_1.png")
 
 
 #images
@@ -84,8 +120,11 @@ ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #ö
 player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
 dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
+
 #bind
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
 
 dino_move()
+create_enemy_1()
+create_enemy_2()
 root.mainloop()
