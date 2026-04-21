@@ -1,7 +1,12 @@
 import tkinter as tk
 
 def dino_move():
-    pass
+    global dino_idle_jump
+
+    canvas.delete(dino_idle_jump) #tar bor dino_idle_jump
+    dino_idle_jump = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_idle_jump_img) #gör en ny din_idle_jump på hitboxens position
+
+    root.after(10, dino_move)
 
 def jump(event):
     global is_jumping
@@ -76,10 +81,8 @@ dino_dead_img = tk.PhotoImage(file="images/dead.png")
 
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
-player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, fill="blue") #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet
-#dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) #är 10px åt vänster om hitboxen
-dino_idle_jump = tk.Label(canvas, image=dino_idle_jump_img, anchor="nw")
-dino_idle_jump.place(x=player_x_pos-10, y=player_y_pos)
+player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
+dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
 #bind
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
