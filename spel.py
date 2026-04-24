@@ -1,47 +1,74 @@
 import tkinter as tk
+from random import randint
 
-def create_enemy_1():
-    global cactus_1
+#Score
+#--------------------------------------------------------------------------------
 
-    cactus_1 = canvas.create_image(800, player_y_pos, anchor="nw", image=cactus_img)
-    move_enemy_1()
+def update_score():
+    global score_label
+    global score
+    global blink
 
-def create_enemy_2():
-    global cactus_2
+    score += 1
+    score_label["text"] = f"{score:05}" #updaterar score_label
 
-    cactus_2 = canvas.create_image(1100, player_y_pos, anchor="nw", image=cactus_img)
-    move_enemy_2()
+    if score % 100 == 0: #efter varje 100 score kommer det att blinka
+        blink = 1
+        score_blinking()
 
-def move_enemy_1():
-    global cactus_1
-    canvas.move(cactus_1, -5, 0)
-    if canvas.coords(cactus_1)[0] < -50:
-        canvas.delete(cactus_1)
-        create_enemy_1()
+    score_label.after(100, update_score)
+
+def score_blinking():
+    global score_label
+    global blink
+
+    if blink < 5: #gör så att det blinkar 2 gånger, varannan gång
+        if blink % 2 == 0: #om blink är jämt
+            score_label.place(x=720, y=2) #syns
+        else:
+            score_label.place_forget() #om blink är ojämt, syns inte
+        blink += 1
+    else:
+        return
+    
+    root.after(250, score_blinking)
+
+#--------------------------------------------------------------------------------
+
+#Kaktusar
+#--------------------------------------------------------------------------------
+
+def create_enemy(): #skapar kaktusar
+    global cactus
+
+    cactus_x_pos = randint(750, 850) #för att det ska bli lite mer variation
+    cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=cactus_img)
+    move_enemy()
+
+
+def move_enemy(): #flyttar kaktusar
+    global cactus
+    canvas.move(cactus, enemy_speed, 0)
+    if canvas.coords(cactus)[0] < -50: #om kaktusen har gått över hela skärmen
+        canvas.delete(cactus)
+        create_enemy()
         return
 
-    root.after(10, move_enemy_1)
+    root.after(10, move_enemy)
 
-def move_enemy_2():
-    global cactus_2
-    canvas.move(cactus_2, -5, 0)
-    if canvas.coords(cactus_2)[0] < -50:
-        canvas.delete(cactus_2)
-        create_enemy_2()
-        return
+#--------------------------------------------------------------------------------
 
-    root.after(10, move_enemy_2)
-
-
-
-
-def dino_move():
+def dino_move(): #flyttar dinosaurien
     global dino_idle_jump
 
     canvas.delete(dino_idle_jump) #tar bor dino_idle_jump
     dino_idle_jump = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_idle_jump_img) #gör en ny din_idle_jump på hitboxens position
 
     root.after(10, dino_move)
+
+
+#Hoppa
+#--------------------------------------------------------------------------------
 
 def jump(event):
     global is_jumping
@@ -77,7 +104,7 @@ def move_up(): #själva hoppet
 
     root.after(10, move_up) #loopar varje 10 millisekunder
 
-
+#--------------------------------------------------------------------------------
 
 root = tk.Tk()
 root.title("Dinosauriespelet")
@@ -91,10 +118,12 @@ canvas.pack(pady=70)
 
 #variables
 ground_level = 290
-jump_height_value = 7
+jump_height_value = 10
 jump_height = jump_height_value
-gravity = 0.2
+gravity = 0.4
 is_jumping = False
+enemy_speed = -8
+score = 0
 
 #x1=player_x_pos, y1=player_y_pos, x2=player_width, y2=player_height
 #hitboxens koordinater och storlek
@@ -121,10 +150,15 @@ player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, playe
 dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
 
+#Labels
+score_label = tk.Label(canvas, text="", font=("Arial", 20), bg="red")
+score_label.place(x=720, y=2)
+
+
 #bind
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
 
 dino_move()
-create_enemy_1()
-create_enemy_2()
+create_enemy()
+update_score()
 root.mainloop()
