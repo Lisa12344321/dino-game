@@ -1,5 +1,6 @@
 import tkinter as tk
 from random import randint
+from random import choice
 
 #Score
 #--------------------------------------------------------------------------------
@@ -40,9 +41,15 @@ def score_blinking():
 
 def create_enemy(): #skapar kaktusar
     global cactus
-
+    
+    cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img]
+    which_cactus = choice(cactus_list)
     cactus_x_pos = randint(750, 850) #för att det ska bli lite mer variation
-    cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=cactus_img)
+
+    if which_cactus == cactus_4_img:
+        cactus = canvas.create_image(cactus_x_pos, player_y_pos + 31, anchor="nw", image=which_cactus) #cactus 4 är inte lika hög så den måste vara längre ner för att inte vara i luften
+    else:
+        cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
     move_enemy()
 
 
@@ -141,7 +148,10 @@ dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
 dino_dead_img = tk.PhotoImage(file="images/dead.png")
-cactus_img = tk.PhotoImage(file="images/kaktus_1.png")
+cactus_1_img = tk.PhotoImage(file="images/kaktus_1.png")
+cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
+cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
+cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
 
 
 #images
