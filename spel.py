@@ -138,9 +138,9 @@ canvas.pack(pady=70)
 
 #variables
 ground_level = 290
-jump_height_value = 10
+jump_height_value = 11
 jump_height = jump_height_value
-gravity = 0.4
+gravity = 0.5
 is_jumping = False
 enemy_speed = -8
 score = 0
