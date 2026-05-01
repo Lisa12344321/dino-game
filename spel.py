@@ -65,6 +65,9 @@ def move_enemy(): #flyttar kaktusar
 
 #--------------------------------------------------------------------------------
 
+#dinosaurie animation
+#--------------------------------------------------------------------------------
+
 def dino_move(): #flyttar dinosaurien
     global dino
     global animation_num
@@ -86,6 +89,30 @@ def dino_move(): #flyttar dinosaurien
 
     root.after(10, dino_move)
 
+#--------------------------------------------------------------------------------
+
+#ground animation
+#--------------------------------------------------------------------------------
+
+def ground_move():
+    global ground
+    global ground_2
+
+    if canvas.coords(ground)[0] < -800:
+        canvas.delete(ground)
+        ground = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
+    else:
+        canvas.move(ground, enemy_speed, 0)
+
+    if canvas.coords(ground_2)[0] < -800:
+        canvas.delete(ground_2)
+        ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
+    else:
+        canvas.move(ground_2, enemy_speed, 0)
+
+    root.after(10, ground_move)
+
+#--------------------------------------------------------------------------------
 
 #Hoppa
 #--------------------------------------------------------------------------------
@@ -134,9 +161,9 @@ root.resizable(width=False, height=False)
 canvas = tk.Canvas(root, width=800, height=480, bg="red")
 canvas.pack(pady=70)
 
+#variables
 #--------------------------
 
-#variables
 ground_level = 290
 jump_height_value = 11
 jump_height = jump_height_value
@@ -153,11 +180,10 @@ player_y_pos = ground_level-70 # 70px högre upp än ground_level
 player_width = player_x_pos + 55
 player_height = player_y_pos + 93
 
-
 #---------------------------
 
 #imports
-ground_img = tk.PhotoImage(file="images/ground.png")
+ground_img = tk.PhotoImage(file="images/ground_copy.png")
 dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
@@ -170,6 +196,7 @@ cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
 
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
+ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
 player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
 dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
@@ -183,6 +210,7 @@ score_label.place(x=720, y=2)
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
 
 dino_move()
+ground_move()
 create_enemy()
 update_score()
 root.mainloop()
