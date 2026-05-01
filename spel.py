@@ -23,7 +23,7 @@ def score_blinking():
     global score_label
     global blink
 
-    if blink < 5: #gör så att det blinkar 2 gånger, varannan gång
+    if blink < 9: #gör så att det blinkar 4 gånger, varannan gång
         if blink % 2 == 0: #om blink är jämt
             score_label.place(x=720, y=2) #syns
         else:
@@ -158,7 +158,7 @@ root.title("Dinosauriespelet")
 root.geometry("1280x720")
 root.resizable(width=False, height=False)
 
-canvas = tk.Canvas(root, width=800, height=480, bg="red")
+canvas = tk.Canvas(root, width=800, height=480, bg="white", highlightthickness=0)
 canvas.pack(pady=70)
 
 #variables
@@ -202,7 +202,7 @@ dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=din
 
 
 #Labels
-score_label = tk.Label(canvas, text="", font=("Arial", 20), bg="red")
+score_label = tk.Label(canvas, text="", font=("Arial", 20), bg="white")
 score_label.place(x=720, y=2)
 
 
