@@ -66,10 +66,23 @@ def move_enemy(): #flyttar kaktusar
 #--------------------------------------------------------------------------------
 
 def dino_move(): #flyttar dinosaurien
-    global dino_idle_jump
+    global dino
+    global animation_num
+    
+    canvas.delete(dino) #tar bor dino_idle_jump
+    
+    if not is_jumping:
+        if animation_num >= 200: #om animation_num är mer än 200 tills det är 400, kommer det vara run 1
+            dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_run_1_img) #gör en ny dino på hitboxens position
+            if animation_num >= 400: #återställs
+                animation_num = 0
+        else: #om animation_num är mindre än 200 kommer det vara run 2
+            dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_run_2_img) #gör en ny dino på hitboxens position
+    else: #om man hoppar ska den inte springa samtidigt
+        dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_idle_jump_img) #gör en ny dino på hitboxens position
 
-    canvas.delete(dino_idle_jump) #tar bor dino_idle_jump
-    dino_idle_jump = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_idle_jump_img) #gör en ny din_idle_jump på hitboxens position
+
+    animation_num += 30 # +30 varje 10 millisekunder
 
     root.after(10, dino_move)
 
@@ -131,6 +144,7 @@ gravity = 0.4
 is_jumping = False
 enemy_speed = -8
 score = 0
+animation_num = 0
 
 #x1=player_x_pos, y1=player_y_pos, x2=player_width, y2=player_height
 #hitboxens koordinater och storlek
@@ -157,7 +171,7 @@ cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
 player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
-dino_idle_jump = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
+dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
 
 #Labels
