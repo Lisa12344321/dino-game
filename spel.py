@@ -114,6 +114,35 @@ def ground_move():
 
 #--------------------------------------------------------------------------------
 
+#moln animation
+#--------------------------------------------------------------------------------
+
+def create_cloud():
+    global cloud_list
+
+    cloud_1 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
+    cloud_2 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
+    cloud_3 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
+    cloud_list = [cloud_1, cloud_2, cloud_3]
+
+    move_cloud()
+    return
+
+def move_cloud():
+    for cloud in cloud_list:
+        canvas.move(cloud, -2, 0)
+        if canvas.coords(cloud)[0] < -100:
+            cloud_list.remove(cloud)
+            canvas.delete(cloud)
+    
+    if cloud_list == []:
+        create_cloud()
+        return
+    
+    root.after(10, move_cloud)
+
+#--------------------------------------------------------------------------------
+
 #Hoppa
 #--------------------------------------------------------------------------------
 
@@ -172,6 +201,7 @@ is_jumping = False
 enemy_speed = -8
 score = 0
 animation_num = 0
+cloud_list = []
 
 #x1=player_x_pos, y1=player_y_pos, x2=player_width, y2=player_height
 #hitboxens koordinater och storlek
@@ -183,7 +213,7 @@ player_height = player_y_pos + 93
 #---------------------------
 
 #imports
-ground_img = tk.PhotoImage(file="images/ground_copy.png")
+ground_img = tk.PhotoImage(file="images/ground.png")
 dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
@@ -192,6 +222,7 @@ cactus_1_img = tk.PhotoImage(file="images/kaktus_1.png")
 cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
 cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
 cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
+cloud_img = tk.PhotoImage(file="images/cloud.png")
 
 
 #images
@@ -210,6 +241,7 @@ score_label.place(x=720, y=2)
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
 
 dino_move()
+create_cloud()
 ground_move()
 create_enemy()
 update_score()
