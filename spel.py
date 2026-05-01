@@ -94,16 +94,17 @@ def dino_move(): #flyttar dinosaurien
 #ground animation
 #--------------------------------------------------------------------------------
 
-def ground_move():
+def ground_move(): #de gör samma sak men att de börjar på olika x
     global ground
     global ground_2
 
-    if canvas.coords(ground)[0] < -800:
-        canvas.delete(ground)
-        ground = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
+    if canvas.coords(ground)[0] < -800: #när den har gått över hela skärmen...
+        canvas.delete(ground) #...så ska den tas bort...
+        ground = canvas.create_image(800, ground_level, anchor="nw", image=ground_img) #..och sen görs en ny på andra sidan skärmen
     else:
         canvas.move(ground, enemy_speed, 0)
 
+    #samma sak
     if canvas.coords(ground_2)[0] < -800:
         canvas.delete(ground_2)
         ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
@@ -129,14 +130,14 @@ def create_cloud():
     return
 
 def move_cloud():
-    for cloud in cloud_list:
-        canvas.move(cloud, -2, 0)
-        if canvas.coords(cloud)[0] < -100:
-            cloud_list.remove(cloud)
-            canvas.delete(cloud)
+    for cloud in cloud_list: #för varje moln i listan
+        canvas.move(cloud, (enemy_speed/2), 0) #flyttas hälften så snabbt som enemy
+        if canvas.coords(cloud)[0] < -100: #när den gått över skärmen
+            cloud_list.remove(cloud) #tas bort från listan
+            canvas.delete(cloud) #tas bort från canvasen
     
-    if cloud_list == []:
-        create_cloud()
+    if cloud_list == []: #om alla moln har gått över skärmen
+        create_cloud() #börjar om | blir dock att det blir tre moln i omgångar, men man märker inte så mycket
         return
     
     root.after(10, move_cloud)
@@ -227,7 +228,7 @@ cloud_img = tk.PhotoImage(file="images/cloud.png")
 
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
-ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
+ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img) #den ena börjar på x=0 och den andra x=800
 player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
 dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
