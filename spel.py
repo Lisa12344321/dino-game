@@ -10,6 +10,9 @@ def update_score():
     global score
     global blink
 
+    if is_game_over:
+        return
+
     score += 1
     score_label["text"] = f"{score:05}" #updaterar score_label
 
@@ -36,7 +39,7 @@ def score_blinking():
 
 #--------------------------------------------------------------------------------
 
-#Kaktusar
+#Kaktusar och nudda kaktus
 #--------------------------------------------------------------------------------
 
 def create_enemy(): #skapar kaktusar
@@ -55,13 +58,32 @@ def create_enemy(): #skapar kaktusar
 
 def move_enemy(): #flyttar kaktusar
     global cactus
+
+    #om man nuddar kaktusen
+    if canvas.coords(cactus)[0] <= canvas.coords(player)[2] and canvas.coords(player)[3] >= canvas.coords(cactus)[1] + 10: #+ 10 för att man ska kunna nudda pyttelite längst upp, så att det blir lättare
+        game_over()
+        return
+
+
     canvas.move(cactus, enemy_speed, 0)
+
     if canvas.coords(cactus)[0] < -50: #om kaktusen har gått över hela skärmen
         canvas.delete(cactus)
         create_enemy()
         return
 
     root.after(10, move_enemy)
+
+#--------------------------------------------------------------------------------
+
+#game over
+#--------------------------------------------------------------------------------
+
+def game_over():
+    global is_game_over
+
+    is_game_over = True
+
 
 #--------------------------------------------------------------------------------
 
@@ -72,6 +94,11 @@ def dino_move(): #flyttar dinosaurien
     global dino
     global animation_num
     
+    if is_game_over:
+        canvas.delete(dino)
+        dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_dead_img)
+        return
+
     canvas.delete(dino) #tar bor dino_idle_jump
     
     if not is_jumping:
@@ -97,6 +124,9 @@ def dino_move(): #flyttar dinosaurien
 def ground_move(): #de gör samma sak men att de börjar på olika x
     global ground
     global ground_2
+
+    if is_game_over:
+        return
 
     if canvas.coords(ground)[0] < -800: #när den har gått över hela skärmen...
         canvas.delete(ground) #...så ska den tas bort...
@@ -130,6 +160,10 @@ def create_cloud():
     return
 
 def move_cloud():
+
+    if is_game_over:
+        return
+
     for cloud in cloud_list: #för varje moln i listan
         canvas.move(cloud, (enemy_speed/2), 0) #flyttas hälften så snabbt som enemy
         if canvas.coords(cloud)[0] < -100: #när den gått över skärmen
@@ -149,6 +183,10 @@ def move_cloud():
 
 def jump(event):
     global is_jumping
+
+    if is_game_over:
+        return
+
     if not is_jumping: #om man inte hoppar
         check_y_pos()
     else:
@@ -183,6 +221,8 @@ def move_up(): #själva hoppet
 
 #--------------------------------------------------------------------------------
 
+#--------------------------------------------------------------------------------
+
 root = tk.Tk()
 root.title("Dinosauriespelet")
 root.geometry("1280x720")
@@ -203,6 +243,7 @@ enemy_speed = -8
 score = 0
 animation_num = 0
 cloud_list = []
+is_game_over = False
 
 #x1=player_x_pos, y1=player_y_pos, x2=player_width, y2=player_height
 #hitboxens koordinater och storlek
@@ -218,7 +259,7 @@ ground_img = tk.PhotoImage(file="images/ground.png")
 dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
-dino_dead_img = tk.PhotoImage(file="images/dead.png")
+dino_dead_img = tk.PhotoImage(file="images/dino_dead.png")
 cactus_1_img = tk.PhotoImage(file="images/kaktus_1.png")
 cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
 cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
@@ -240,6 +281,7 @@ score_label.place(x=720, y=2)
 
 #bind
 root.bind("<space>", jump) #om man trycker "space" kommer funktionen jump börja
+
 
 dino_move()
 create_cloud()
