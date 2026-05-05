@@ -83,6 +83,8 @@ def game_over():
     global is_game_over
 
     is_game_over = True
+    game_over_text.place(x=210, y=100)
+    restart_button.place(x=364, y=200)
 
 
 #--------------------------------------------------------------------------------
@@ -259,12 +261,14 @@ ground_img = tk.PhotoImage(file="images/ground.png")
 dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
 dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
 dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
-dino_dead_img = tk.PhotoImage(file="images/dino_dead.png")
+dino_dead_img = tk.PhotoImage(file="images/dead.png")
 cactus_1_img = tk.PhotoImage(file="images/kaktus_1.png")
 cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
 cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
 cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
 cloud_img = tk.PhotoImage(file="images/cloud.png")
+game_over_img = tk.PhotoImage(file="images/game_over.png")
+restart_img = tk.PhotoImage(file="images/restart_button.png")
 
 
 #images
@@ -277,6 +281,8 @@ dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=din
 #Labels
 score_label = tk.Label(canvas, text="", font=("Arial", 20), bg="white")
 score_label.place(x=720, y=2)
+game_over_text = tk.Label(canvas, image=game_over_img, bg="white")
+restart_button = tk.Label(canvas, image=restart_img, bg="white")
 
 
 #bind
