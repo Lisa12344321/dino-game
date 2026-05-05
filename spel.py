@@ -60,14 +60,14 @@ def move_enemy(): #flyttar kaktusar
     global cactus
 
     #om man nuddar kaktusen
-    if canvas.coords(cactus)[0] <= canvas.coords(player)[2] and canvas.coords(player)[3] >= canvas.coords(cactus)[1] + 10: #+ 10 för att man ska kunna nudda pyttelite längst upp, så att det blir lättare
+    if canvas.coords(cactus)[0] <= canvas.coords(player)[2] and canvas.coords(player)[3] >= canvas.coords(cactus)[1] + 30: #+ 30 för att man ska kunna nudda pyttelite längst upp, så att det blir lättare
         game_over()
         return
 
 
     canvas.move(cactus, enemy_speed, 0)
 
-    if canvas.coords(cactus)[0] < -50: #om kaktusen har gått över hela skärmen
+    if canvas.coords(cactus)[0] < -100: #om kaktusen har gått över hela skärmen
         canvas.delete(cactus)
         create_enemy()
         return
