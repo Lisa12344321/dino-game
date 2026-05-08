@@ -9,6 +9,11 @@ def update_score():
     global score_label
     global score
     global blink
+    global starting
+
+    if starting:
+        score = 0
+        starting = False
 
     if is_game_over:
         return
@@ -44,7 +49,12 @@ def score_blinking():
 
 def create_enemy(): #skapar kaktusar
     global cactus
-    
+    global starting
+    global is_game_over
+
+    if starting:
+        canvas.delete(cactus)
+
     cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img]
     which_cactus = choice(cactus_list)
     cactus_x_pos = randint(750, 850) #för att det ska bli lite mer variation
@@ -53,14 +63,17 @@ def create_enemy(): #skapar kaktusar
         cactus = canvas.create_image(cactus_x_pos, player_y_pos + 31, anchor="nw", image=which_cactus) #cactus 4 är inte lika hög så den måste vara längre ner för att inte vara i luften
     else:
         cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
+    
     move_enemy()
 
 
 def move_enemy(): #flyttar kaktusar
     global cactus
+    global is_game_over
 
     #om man nuddar kaktusen
     if canvas.coords(cactus)[0] <= canvas.coords(player)[2] and canvas.coords(player)[3] >= canvas.coords(cactus)[1] + 30: #+ 30 för att man ska kunna nudda pyttelite längst upp, så att det blir lättare
+        is_game_over = True
         game_over()
         return
 
@@ -82,10 +95,42 @@ def move_enemy(): #flyttar kaktusar
 def game_over():
     global is_game_over
 
-    is_game_over = True
     game_over_text.place(x=210, y=100)
     restart_button.place(x=364, y=200)
 
+    if is_game_over:
+        root.bind("<r>", restart)
+    else:
+        game_over_text.place_forget()
+        restart_button.place_forget()
+        root.unbind("<r>", restart)
+        return
+    
+    root.after(10, game_over)
+
+
+#--------------------------------------------------------------------------------
+
+#Start, restart
+#--------------------------------------------------------------------------------
+
+def restart(event):
+    global is_game_over
+
+    is_game_over = False
+    start_game()
+    return
+
+def start_game():
+    global starting
+
+    starting = True
+    dino_move()
+    create_cloud()
+    ground_move()
+    create_enemy()
+    update_score()
+    return
 
 #--------------------------------------------------------------------------------
 
@@ -95,11 +140,17 @@ def game_over():
 def dino_move(): #flyttar dinosaurien
     global dino
     global animation_num
+    global starting
     
     if is_game_over:
         canvas.delete(dino)
         dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_dead_img)
         return
+    
+    if starting:
+        canvas.delete(dino)
+        dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_run_1_img)
+
 
     canvas.delete(dino) #tar bor dino_idle_jump
     
@@ -127,6 +178,12 @@ def ground_move(): #de gör samma sak men att de börjar på olika x
     global ground
     global ground_2
 
+    if starting:
+        canvas.delete(ground)
+        canvas.delete(ground_2)
+        ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img)
+        ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img)
+
     if is_game_over:
         return
 
@@ -152,6 +209,11 @@ def ground_move(): #de gör samma sak men att de börjar på olika x
 
 def create_cloud():
     global cloud_list
+
+    if starting:
+        for cloud in cloud_list:
+            cloud_list.remove(cloud)
+            canvas.delete(cloud)
 
     cloud_1 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
     cloud_2 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
@@ -185,6 +247,8 @@ def move_cloud():
 
 def jump(event):
     global is_jumping
+    global jump_height
+    global jump_height_value
 
     if is_game_over:
         return
@@ -246,6 +310,7 @@ score = 0
 animation_num = 0
 cloud_list = []
 is_game_over = False
+starting = False
 
 #x1=player_x_pos, y1=player_y_pos, x2=player_width, y2=player_height
 #hitboxens koordinater och storlek
@@ -274,7 +339,7 @@ restart_img = tk.PhotoImage(file="images/restart_button.png")
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
 ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img) #den ena börjar på x=0 och den andra x=800
-player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
+player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0, fill="red") #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
 dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
 
