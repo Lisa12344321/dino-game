@@ -52,7 +52,7 @@ def create_enemy(): #skapar kaktusar
     global starting
     global is_game_over
 
-    if starting:
+    if starting: #gör så att det inte blir flera kaktusar, så om man restartar tas den kaktus som är kvar bort innan spelet börjar
         canvas.delete(cactus)
 
     cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img]
