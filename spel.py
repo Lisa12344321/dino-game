@@ -99,11 +99,13 @@ def game_over():
     restart_button.place(x=364, y=200)
 
     if is_game_over:
-        root.bind("<r>", restart)
+        root.unbind("<space>")
+        root.bind("<space>", restart)
     else:
         game_over_text.place_forget()
         restart_button.place_forget()
-        root.unbind("<r>", restart)
+        root.unbind("<space>")
+        root.bind("<space>", jump)
         return
     
     root.after(10, game_over)
