@@ -214,8 +214,10 @@ def create_cloud():
 
     if starting:
         for cloud in cloud_list:
-            cloud_list.remove(cloud)
             canvas.delete(cloud)
+        cloud_list.clear()
+            
+
 
     cloud_1 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
     cloud_2 = canvas.create_image(randint(800, 1500), randint(0, 150), anchor="nw", image=cloud_img)
@@ -233,8 +235,9 @@ def move_cloud():
     for cloud in cloud_list: #för varje moln i listan
         canvas.move(cloud, (enemy_speed/2), 0) #flyttas hälften så snabbt som enemy
         if canvas.coords(cloud)[0] < -100: #när den gått över skärmen
-            cloud_list.remove(cloud) #tas bort från listan
             canvas.delete(cloud) #tas bort från canvasen
+            cloud_list.remove(cloud) #tas bort från listan
+            
     
     if cloud_list == []: #om alla moln har gått över skärmen
         create_cloud() #börjar om | blir dock att det blir tre moln i omgångar, men man märker inte så mycket
