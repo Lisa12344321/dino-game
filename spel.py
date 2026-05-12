@@ -51,16 +51,20 @@ def create_enemy(): #skapar kaktusar
     global cactus
     global starting
     global is_game_over
+    global which_cactus
 
     if starting: #gör så att det inte blir flera kaktusar, så om man restartar tas den kaktus som är kvar bort innan spelet börjar
         canvas.delete(cactus)
 
-    cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img]
+    cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img, bird_1_img]
     which_cactus = choice(cactus_list)
     cactus_x_pos = randint(750, 850) #för att det ska bli lite mer variation
 
     if which_cactus == cactus_4_img:
         cactus = canvas.create_image(cactus_x_pos, player_y_pos + 31, anchor="nw", image=which_cactus) #cactus 4 är inte lika hög så den måste vara längre ner för att inte vara i luften
+    elif which_cactus == bird_1_img:
+        bird_animation()
+        cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
     else:
         cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
     
@@ -77,7 +81,6 @@ def move_enemy(): #flyttar kaktusar
         game_over()
         return
 
-
     canvas.move(cactus, enemy_speed, 0)
 
     if canvas.coords(cactus)[0] < -100: #om kaktusen har gått över hela skärmen
@@ -86,6 +89,24 @@ def move_enemy(): #flyttar kaktusar
         return
 
     root.after(10, move_enemy)
+
+def bird_animation():
+    global cactus
+
+    bird_animation_num = 0
+    
+    canvas.delete(cactus)
+    if bird_animation_num >= 300:
+        cactus = canvas.create_image((canvas.coords(cactus)[0]), player_y_pos, anchor="nw", image=bird_2_img)
+        if bird_animation_num >= 600:
+            animation_num = 0
+    else:
+        cactus = canvas.create_image((canvas.coords(cactus)[0]), player_y_pos, anchor="nw", image=bird_1_img)
+    
+    bird_animation_num += 30
+
+    root.after(10, bird_animation)
+
 
 #--------------------------------------------------------------------------------
 
@@ -337,6 +358,8 @@ cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
 cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
 cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
 cloud_img = tk.PhotoImage(file="images/cloud.png")
+bird_1_img = tk.PhotoImage(file="images/fågel_1.png")
+bird_2_img = tk.PhotoImage(file="images/fågel_2.png")
 game_over_img = tk.PhotoImage(file="images/game_over.png")
 restart_img = tk.PhotoImage(file="images/restart_button.png")
 
