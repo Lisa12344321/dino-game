@@ -324,6 +324,7 @@ def move_up(): #själva hoppet
 
 root = tk.Tk()
 root.title("Dinosauriespelet")
+root.iconbitmap("C:\\Users\\lisa.alfven\\code\\dino-game\\images\\dino-game-icon.png")
 root.geometry("1280x720")
 root.resizable(width=False, height=False)
 
@@ -356,20 +357,20 @@ player_height = player_y_pos + 93
 #---------------------------
 
 #imports
-ground_img = tk.PhotoImage(file="images/ground.png")
-dino_idle_jump_img = tk.PhotoImage(file="images/idle-jump.png")
-dino_run_1_img = tk.PhotoImage(file="images/run_1.png")
-dino_run_2_img = tk.PhotoImage(file="images/run_2.png")
-dino_dead_img = tk.PhotoImage(file="images/dead.png")
-cactus_1_img = tk.PhotoImage(file="images/kaktus_1.png")
-cactus_2_img = tk.PhotoImage(file="images/kaktus_2.png")
-cactus_3_img = tk.PhotoImage(file="images/kaktus_3.png")
-cactus_4_img = tk.PhotoImage(file="images/kaktus_4.png")
-cloud_img = tk.PhotoImage(file="images/cloud.png")
-bird_1_img = tk.PhotoImage(file="images/fågel_1.png")
-bird_2_img = tk.PhotoImage(file="images/fågel_2.png")
-game_over_img = tk.PhotoImage(file="images/game_over.png")
-restart_img = tk.PhotoImage(file="images/restart_button.png")
+ground_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\ground.png")
+dino_idle_jump_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\idle-jump.png")
+dino_run_1_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\run_1.png")
+dino_run_2_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\run_2.png")
+dino_dead_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\dead.png")
+cactus_1_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\kaktus_1.png")
+cactus_2_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\kaktus_2.png")
+cactus_3_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\kaktus_3.png")
+cactus_4_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\kaktus_4.png")
+cloud_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\cloud.png")
+bird_1_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\fågel_1.png")
+bird_2_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\fågel_2.png")
+game_over_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\game_over.png")
+restart_img = tk.PhotoImage(file="C:\\Users\\lisa.alfven\\code\\dino-game\\images\\restart_button.png")
 
 
 #images
