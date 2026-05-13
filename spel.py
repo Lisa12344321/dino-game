@@ -2,7 +2,7 @@ import tkinter as tk
 from random import randint
 from random import choice
 
-#Score
+#Score och ökar enemy speed
 #--------------------------------------------------------------------------------
 
 def update_score():
@@ -10,6 +10,7 @@ def update_score():
     global score
     global blink
     global starting
+    global enemy_speed
 
     if starting: #om spelet restartar så ska scoren återställas
         score = 0
@@ -23,9 +24,11 @@ def update_score():
 
     if score % 100 == 0: #efter varje 100 score kommer det att blinka
         blink = 1
+        enemy_speed -= 1 #enemy_speed blir lite snabbare varje 100 score
         score_blinking()
 
     score_label.after(100, update_score)
+
 
 def score_blinking():
     global score_label
@@ -146,8 +149,10 @@ def restart(event):
 
 def start_game():
     global starting
+    global enemy_speed
 
     starting = True
+    enemy_speed = -8
     #kallar funktionerna som kallas i början igen
     dino_move()
     create_cloud()
