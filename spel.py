@@ -11,9 +11,9 @@ def update_score():
     global blink
     global starting
 
-    if starting:
+    if starting: #om spelet restartar så ska scoren återställas
         score = 0
-        starting = False
+        starting = False #det är här som starting blir false för att det är update_score() som kallas sist
 
     if is_game_over:
         return
@@ -82,27 +82,27 @@ def move_enemy(): #flyttar enemies
         game_over()
         return
 
-    
+    #fågelanimation, funkar på samma sätt som dinoanimationen, fast långsammare
     if which_cactus == bird_1_img: #om det är en fågel så ska det vara en animation
-        canvas.delete(cactus)
+        canvas.delete(cactus) #tar bort fågeln
         if bird_animation_num >= 400:
-            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_2_img)
-            if bird_animation_num >= 800:
+            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_2_img) #gör en ny på nya positionen
+            if bird_animation_num >= 800: #om båda bilderna ska vara lika länge måste det här värdet vara dubbelt så stort som det andra
                 bird_animation_num = 0
         else:
-            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_1_img)
+            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_1_img) #gör en ny på nya positionen
         
         bird_animation_num += 30
     else:
         canvas.move(cactus, enemy_speed, 0) #om det är en kaktus så ska den bara flytta sig utan animation
 
 
-    if canvas.coords(cactus)[0] < -100: #om kaktusen har gått över hela skärmen
+    if canvas.coords(cactus)[0] < -100: #om kaktusen/fågeln har gått över hela skärmen
         canvas.delete(cactus)
         create_enemy()
         return
 
-    cactus_x_pos += enemy_speed
+    cactus_x_pos += enemy_speed #måste flytta fågeln på det här sättet istället för move, eftersom att man tar bort fågeln och gör sedan en ny och då måste den veta på vilken position den ska skapa den nya
 
     root.after(10, move_enemy)
 
@@ -115,17 +115,18 @@ def move_enemy(): #flyttar enemies
 def game_over():
     global is_game_over
 
+    #visar game over texten och restartknappen
     game_over_text.place(x=210, y=100)
     restart_button.place(x=364, y=200)
 
     if is_game_over:
-        root.unbind("<space>")
-        root.bind("<space>", restart)
-    else:
-        game_over_text.place_forget()
+        root.unbind("<space>") #gör så att man inte hoppar på space längre
+        root.bind("<space>", restart) #man restartar istället på space
+    else: #när det inte längre är game over
+        game_over_text.place_forget() #tar bort game over texten och restartknappen
         restart_button.place_forget()
-        root.unbind("<space>")
-        root.bind("<space>", jump)
+        root.unbind("<space>") #måste göra "unbind" så att inte båda grejerna händer när man trycker space
+        root.bind("<space>", jump) #nu hoppar man på space och inte restart
         return
     
     root.after(10, game_over)
@@ -140,13 +141,14 @@ def restart(event):
     global is_game_over
 
     is_game_over = False
-    start_game()
+    start_game() #startar om spelet
     return
 
 def start_game():
     global starting
 
     starting = True
+    #kallar funktionerna som kallas i början igen
     dino_move()
     create_cloud()
     ground_move()
@@ -174,9 +176,10 @@ def dino_move(): #flyttar dinosaurien
         dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_run_1_img)
 
 
-    canvas.delete(dino) #tar bor dino_idle_jump
+    canvas.delete(dino) #tar bort dino varje 10 millisekunder, sedan ersätts den med en ny på en ny position
     
     if not is_jumping:
+        #båda bilderna kommer vara lika länge
         if animation_num >= 200: #om animation_num är mer än 200 tills det är 400, kommer det vara run 1
             dino = canvas.create_image(player_x_pos-10, canvas.coords(player)[1], anchor="nw", image=dino_run_1_img) #gör en ny dino på hitboxens position
             if animation_num >= 400: #återställs
@@ -196,11 +199,11 @@ def dino_move(): #flyttar dinosaurien
 #ground animation
 #--------------------------------------------------------------------------------
 
-def ground_move(): #de gör samma sak men att de börjar på olika x
+def ground_move(): #de gör samma sak men de börjar på olika x
     global ground
     global ground_2
 
-    if starting:
+    if starting: #återställer
         canvas.delete(ground)
         canvas.delete(ground_2)
         ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img)
@@ -226,7 +229,7 @@ def ground_move(): #de gör samma sak men att de börjar på olika x
 
 #--------------------------------------------------------------------------------
 
-#moln animation
+#molnanimation
 #--------------------------------------------------------------------------------
 
 def create_cloud():
