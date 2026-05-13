@@ -44,68 +44,67 @@ def score_blinking():
 
 #--------------------------------------------------------------------------------
 
-#Kaktusar och nudda kaktus
+#Kaktusar/fåglar och nudda kaktus/fågel och fågelanimation
 #--------------------------------------------------------------------------------
 
-def create_enemy(): #skapar kaktusar
+def create_enemy(): #skapar kaktusar/fåglar (båda heter cactus...)
     global cactus
     global starting
     global is_game_over
     global which_cactus
+    global cactus_x_pos
 
     if starting: #gör så att det inte blir flera kaktusar, så om man restartar tas den kaktus som är kvar bort innan spelet börjar
         canvas.delete(cactus)
 
     cactus_list = [cactus_1_img, cactus_2_img, cactus_3_img, cactus_4_img, bird_1_img]
-    which_cactus = choice(cactus_list)
+    which_cactus = choice(cactus_list) #väljer vilken kaktus det ska vara eller fågel
     cactus_x_pos = randint(750, 850) #för att det ska bli lite mer variation
 
     if which_cactus == cactus_4_img:
         cactus = canvas.create_image(cactus_x_pos, player_y_pos + 31, anchor="nw", image=which_cactus) #cactus 4 är inte lika hög så den måste vara längre ner för att inte vara i luften
-    elif which_cactus == bird_1_img:
-        bird_animation()
-        cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
     else:
         cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=which_cactus)
     
     move_enemy()
 
 
-def move_enemy(): #flyttar kaktusar
+def move_enemy(): #flyttar enemies
     global cactus
     global is_game_over
+    global which_cactus
+    global cactus_x_pos
+    global bird_animation_num
 
-    #om man nuddar kaktusen
+    #om man nuddar kaktusen/fågeln
     if canvas.coords(cactus)[0] <= canvas.coords(player)[2] and canvas.coords(player)[3] >= canvas.coords(cactus)[1] + 30: #+ 30 för att man ska kunna nudda pyttelite längst upp, så att det blir lättare
         is_game_over = True
         game_over()
         return
 
-    canvas.move(cactus, enemy_speed, 0)
+    
+    if which_cactus == bird_1_img: #om det är en fågel så ska det vara en animation
+        canvas.delete(cactus)
+        if bird_animation_num >= 400:
+            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_2_img)
+            if bird_animation_num >= 800:
+                bird_animation_num = 0
+        else:
+            cactus = canvas.create_image(cactus_x_pos, player_y_pos, anchor="nw", image=bird_1_img)
+        
+        bird_animation_num += 30
+    else:
+        canvas.move(cactus, enemy_speed, 0) #om det är en kaktus så ska den bara flytta sig utan animation
+
 
     if canvas.coords(cactus)[0] < -100: #om kaktusen har gått över hela skärmen
         canvas.delete(cactus)
         create_enemy()
         return
 
+    cactus_x_pos += enemy_speed
+
     root.after(10, move_enemy)
-
-def bird_animation():
-    global cactus
-
-    bird_animation_num = 0
-    
-    canvas.delete(cactus)
-    if bird_animation_num >= 300:
-        cactus = canvas.create_image((canvas.coords(cactus)[0]), player_y_pos, anchor="nw", image=bird_2_img)
-        if bird_animation_num >= 600:
-            animation_num = 0
-    else:
-        cactus = canvas.create_image((canvas.coords(cactus)[0]), player_y_pos, anchor="nw", image=bird_1_img)
-    
-    bird_animation_num += 30
-
-    root.after(10, bird_animation)
 
 
 #--------------------------------------------------------------------------------
@@ -334,6 +333,7 @@ is_jumping = False
 enemy_speed = -8
 score = 0
 animation_num = 0
+bird_animation_num = 0
 cloud_list = []
 is_game_over = False
 starting = False
@@ -367,7 +367,7 @@ restart_img = tk.PhotoImage(file="images/restart_button.png")
 #images
 ground = canvas.create_image(0, ground_level, anchor="nw", image=ground_img) #övre vänstra hörnet är koordinaterna (0, ground_level)
 ground_2 = canvas.create_image(800, ground_level, anchor="nw", image=ground_img) #den ena börjar på x=0 och den andra x=800
-player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0, fill="red") #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
+player = canvas.create_rectangle(player_x_pos, player_y_pos, player_width, player_height, width=0) #hitboxen, är lite smalare än dinosaurien | x1, y1, x2, y2 | player_x_pos och player_y_pos är övre vänstra hörnet, player_width och player_height är undre högra hörnet | width=0 är att det inte är en border runt
 dino = canvas.create_image(player_x_pos-10, player_y_pos, anchor="nw", image=dino_idle_jump_img) # dinosaurien är 10px åt vänster om hitboxen
 
 
