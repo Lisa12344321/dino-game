@@ -311,7 +311,7 @@ def move_up(): #själva hoppet
     is_jumping = True
     
     canvas.move(player, 0, -jump_height) #spelaren flyttas jump_height uppåt varje gång det loopar, när jump_height blir negativ flyttas spelaren neråt istället
-    jump_height -= gravity #jump_height blir mindre och mindre och blir även negativ | först skjiljer sig jump_height mycket från 0 och då flyttas den snabbt uppåt sen blir det mindre och mindre tills det vänder och blir mer och mer negativt | det här gör att det ser mer ut som ett faktiskt hopp än att den flyttas med jämn hastighet
+    jump_height -= gravity #jump_height blir mindre och mindre och blir även negativ | först skiljer sig jump_height mycket från 0 och då flyttas den snabbt uppåt sen blir det mindre och mindre tills det vänder och blir mer och mer negativt | det här gör att det ser mer ut som ett faktiskt hopp än att den flyttas med jämn hastighet
     if canvas.coords(player)[1] >= player_y_pos: #om man nuddar marken igen
         is_jumping = False
         return #gör att loopen slutar
