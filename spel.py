@@ -324,9 +324,9 @@ def move_up(): #själva hoppet
 
 root = tk.Tk()
 root.title("Dinosauriespelet")
-root.iconbitmap("C:\\Users\\lisa.alfven\\code\\dino-game\\images\\dino-game-icon.png")
 root.geometry("1280x720")
 root.resizable(width=False, height=False)
+root.iconbitmap("C:\\Users\\lisa.alfven\\code\\dino-game\\images\\dino-game-icon.ico")
 
 canvas = tk.Canvas(root, width=800, height=480, bg="white", highlightthickness=0)
 canvas.pack(pady=70)
